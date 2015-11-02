@@ -18,17 +18,19 @@
   <body>
     <div id="map"></div>
     <script>
-// Note: This example requires that you consent to location sharing when
-// prompted by your browser. If you see the error "The Geolocation service
-// failed.", it means you probably did not give permission for the browser to
-// locate you.
-
 function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: -34.397, lng: 150.644},
     zoom: 6
   });
+
   var infoWindow = new google.maps.InfoWindow({map: map});
+
+  var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    title: 'Hello World!'
+  });
 
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
@@ -36,7 +38,9 @@ function initMap() {
       var pos = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
-      };
+      },
+      myLatLng = {po.lat, po.lng};
+
 
       infoWindow.setPosition(pos);
       infoWindow.setContent('Location found.');
@@ -53,13 +57,11 @@ function initMap() {
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.setPosition(pos);
   infoWindow.setContent(browserHasGeolocation ?
-                        'Error: The Geolocation service failed.' :
-                        'Error: Your browser doesn\'t support geolocation.');
+    'Error: The Geolocation service failed.' :
+    'Error: Your browser doesn\'t support geolocation.');
 }
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1PrlbPT7Vs_3IqmmG1l_e3C1fnlGzVXo&signed_in=true&callback=initMap"
-        async defer>
-    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1PrlbPT7Vs_3IqmmG1l_e3C1fnlGzVXo&signed_in=true&callback=initMap" async defer></script>
   </body>
 </html>
