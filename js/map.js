@@ -1,5 +1,7 @@
 var app = angular.module('AngularGoogleMap', ['google-maps']);
 
+var alertBox = document.getElementById('alertbox');
+
 app.factory('MarkerCreatorService', function () {
 
     var markerId = 0;
@@ -39,7 +41,7 @@ app.factory('MarkerCreatorService', function () {
                 var marker = create(latitude, longitude);
                 invokeSuccessCallback(successCallback, marker);
             } else {
-                alert("Unknown address: " + address);
+                alertBox.textContent = 'Unknown address: ' + address;
             }
         });
     }
@@ -51,7 +53,6 @@ app.factory('MarkerCreatorService', function () {
                 invokeSuccessCallback(successCallback, marker);
             });
         } else {
-            //alert('Unable to locate current position');
             alertBox.textContent = 'Unable to locate current position';
         }
     }
@@ -65,8 +66,6 @@ app.factory('MarkerCreatorService', function () {
 });
 
 app.controller('MapCtrl', ['MarkerCreatorService', '$scope', function (MarkerCreatorService, $scope) {
-
-    var alertBox = document.getElementById('alertbox');
 
     MarkerCreatorService.createByCoords(0, 0, function (marker) {
         marker.options.labelContent = 'The Ocean';
