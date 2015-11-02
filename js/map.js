@@ -1,7 +1,8 @@
 var app = angular.module('AngularGoogleMap', ['google-maps']);
 
-var alertBox = document.getElementById('alertbox');
+//var alertBox = document.getElementById('alertbox');
 
+// Begin Factory
 app.factory('MarkerCreatorService', function () {
 
     var markerId = 0;
@@ -41,7 +42,7 @@ app.factory('MarkerCreatorService', function () {
                 var marker = create(latitude, longitude);
                 invokeSuccessCallback(successCallback, marker);
             } else {
-                alertBox.textContent = 'Unknown address: ' + address;
+                document.getElementById('alertbox').textContent = 'Unknown address: ' + address;
             }
         });
     }
@@ -53,7 +54,7 @@ app.factory('MarkerCreatorService', function () {
                 invokeSuccessCallback(successCallback, marker);
             });
         } else {
-            alertBox.textContent = 'Unable to locate current position';
+            document.getElementById('alertbox').textContent = 'Unable to locate current position';
         }
     }
 
@@ -64,6 +65,8 @@ app.factory('MarkerCreatorService', function () {
     };
 
 });
+
+// Begin Controller
 
 app.controller('MapCtrl', ['MarkerCreatorService', '$scope', function (MarkerCreatorService, $scope) {
 
@@ -90,13 +93,13 @@ app.controller('MapCtrl', ['MarkerCreatorService', '$scope', function (MarkerCre
     $scope.map.markers.push($scope.myMarker);
 
     $scope.addCurrentLocation = function () {
-        alertBox.innerHTML = 'Searching for location<span>.</span><span>.</span><span>.</span>';
+        document.getElementById('alertbox').innerHTML = 'Searching for location<span>.</span><span>.</span><span>.</span>';
         MarkerCreatorService.createByCurrentLocation(function (marker) {
             marker.options.labelContent = 'You are here';
             $scope.map.markers.push(marker);
             refresh(marker);
-            alertBox.textContent = 'Location Found!';
-            alertBox.className = "found";
+            document.getElementById('alertbox').textContent = 'Location Found!';
+            document.getElementById('alertbox').className = "found";
         });
     };
 
