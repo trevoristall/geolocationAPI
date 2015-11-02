@@ -12,10 +12,65 @@
       }
       #map {
         height: 100%;
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
       }
+      #alertbox {
+        opacity: 1;
+        font-family: sans-serif;
+        padding: .5em 1em;
+        background: white;
+        border-radius: 5px;
+        text-align: center;
+        width: 9em;
+        margin: 1em auto;
+        box-shadow: 3px 3px 8px rgba(0,0,0,.1);
+        z-index: 1000;
+      }
+
+@-webkit-keyframes opacity {
+	0% { opacity: 1; }
+	100% { opacity: 0; }
+}
+@-moz-keyframes opacity {
+	0% { opacity: 1; }
+	100% { opacity: 0; }
+}
+
+#alertbox span {
+	-webkit-animation-name: opacity;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-iteration-count: infinite;
+
+	-moz-animation-name: opacity;
+	-moz-animation-duration: 1s;
+	-moz-animation-iteration-count: infinite;
+}
+
+#alertbox span:nth-child(2) {
+	-webkit-animation-delay: 100ms;
+	-moz-animation-delay: 100ms;
+}
+
+#alertbox span:nth-child(3) {
+	-webkit-animation-delay: 300ms;
+	-moz-animation-delay: 300ms;
+}
+
+#alertbox.found {
+  transition: 3s opacity;
+  opacity: 0;
+}
     </style>
   </head>
   <body>
+    <div id="alertbox">
+        Searching for location<span>.</span><span>.</span><span>.</span>
+    </div>
     <div id="map"></div>
     <script>
 function initMap() {
@@ -24,13 +79,27 @@ function initMap() {
     zoom: 6
   });
 
-  var infoWindow = new google.maps.InfoWindow({map: map});
+  var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      labelIndex = 0,
+      alertBox = document.getElementById('alertbox');
+      //infoWindow = new google.maps.InfoWindow({map: map});
 
-  var marker = new google.maps.Marker({
-    position: myLatLng,
-    map: map,
-    title: 'Hello World!'
+  // This event listener calls addMarker() when the map is clicked.
+  google.maps.event.addListener(map, 'click', function(event) {
+    addMarker(event.latLng, map);
   });
+
+  // Adds a marker to the map.
+function addMarker(location, map) {
+  // Add the marker at the clicked location, and add the next-available label
+  // from the array of alphabetical characters.
+  var marker = new google.maps.Marker({
+    position: location,
+    label: labels[labelIndex++ % labels.length],
+    map: map,
+    animation: google.maps.Animation.DROP
+  });
+}
 
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
@@ -38,13 +107,15 @@ function initMap() {
       var pos = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
-      },
-      myLatLng = {po.lat, po.lng};
+      };
 
-
-      infoWindow.setPosition(pos);
-      infoWindow.setContent('Location found.');
+      //infoWindow.setPosition(pos);
+      addMarker(pos, map);
+      alertBox.textContent = 'Location Found!';
+      alertBox.className = "found";
+      //infoWindow.setContent('Location found.');
       map.setCenter(pos);
+      map.setZoom(20);
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });
