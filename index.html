@@ -22,12 +22,6 @@
 </head>
 <body ng-controller="MapCtrl">
   <h1>Googlemaps &amp; HTML5 Geolocation API</h1>
-  <ul>
-    <li>Bootstrap</li>
-    <li>AngularJS</li>
-    <li>HTML5 Geolocation API</li>
-    <li>Google Maps API</li>
-  </ul>
   <div class="map_container col-md-8">
     <google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" control="map.control">
       <markers models="map.markers" coords="'self'" options="'options'" isLabel='true'>
@@ -35,16 +29,22 @@
     </google-map>
   </div>
   <div class="controls col-md-4">
-    <h3>Current location</h3>
-    <p><button class="btn btn-primary" ng-click="addCurrentLocation()">Current location</button></p>
-    <p id="alertbox"></p>
-    <h3>Search</h3>
+    <div class="form-group">
+      <label for="search">Search</label>
+      <input type="text" id="search" class="form-control" placeholder="i.e: 'Washington DC'" ng-model="address" />
+    </div>
+    <div class="form-group">
+      <button class="btn btn-primary" ng-click="addAddress()"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</button> <button class="btn btn-default" ng-click="addCurrentLocation()">Current Location</button>
+      <p id="alertbox"></p>
+    </div>
     <p>
-      <input type="text" placeholder="i.e: 'Washington DC'" ng-model="address" style="width: 210px"/>
-      <button class="btn btn-primary" ng-click="addAddress()">Look up!</button>
-    </p>
-    <p>
-      <a href="https://github.com/trevoristall/geolocationAPI" target="_blank">Source Code</a>
+      <ul>
+        <li>Bootstrap</li>
+        <li>AngularJS</li>
+        <li>HTML5 Geolocation API</li>
+        <li>Google Maps API</li>
+      </ul>
+      <a href="https://github.com/trevoristall/geolocationAPI" class="btn btn-default" role="button">Source Code</a>
     </p>
   </div>
 
