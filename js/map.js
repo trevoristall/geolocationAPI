@@ -51,7 +51,8 @@ app.factory('MarkerCreatorService', function () {
                 invokeSuccessCallback(successCallback, marker);
             });
         } else {
-            alert('Unable to locate current position');
+            //alert('Unable to locate current position');
+            alertBox.textContent = 'Unable to locate current position';
         }
     }
 
@@ -63,19 +64,21 @@ app.factory('MarkerCreatorService', function () {
 
 });
 
-    app.controller('MapCtrl', ['MarkerCreatorService', '$scope', function (MarkerCreatorService, $scope) {
+app.controller('MapCtrl', ['MarkerCreatorService', '$scope', function (MarkerCreatorService, $scope) {
+
+    var alertBox = document.getElementById('alertbox');
 
     MarkerCreatorService.createByCoords(0, 0, function (marker) {
         marker.options.labelContent = 'The Ocean';
-        $scope.autentiaMarker = marker;
+        $scope.myMarker = marker;
     });
 
     $scope.address = '';
 
     $scope.map = {
         center: {
-            latitude: $scope.autentiaMarker.latitude,
-            longitude: $scope.autentiaMarker.longitude
+            latitude: $scope.myMarker.latitude,
+            longitude: $scope.myMarker.longitude
         },
         zoom: 6,
         markers: [],
@@ -85,13 +88,16 @@ app.factory('MarkerCreatorService', function () {
         }
     };
 
-    $scope.map.markers.push($scope.autentiaMarker);
+    $scope.map.markers.push($scope.myMarker);
 
     $scope.addCurrentLocation = function () {
+        alertBox.innerHTML = 'Searching for location<span>.</span><span>.</span><span>.</span>';
         MarkerCreatorService.createByCurrentLocation(function (marker) {
             marker.options.labelContent = 'You are here';
             $scope.map.markers.push(marker);
             refresh(marker);
+            alertBox.textContent = 'Location Found!';
+            alertBox.className = "found";
         });
     };
 
